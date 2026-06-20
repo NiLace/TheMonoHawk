@@ -1,0 +1,293 @@
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix doap:  <http://usefulinc.com/ns/doap#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
+
+<https://thehawk.audio/lv2/tuner>
+    a lv2:Plugin , lv2:AnalyserPlugin ;
+    doap:name "The Hawk Tuner" ;
+    lv2:minorVersion 1 ;
+    lv2:microVersion 0 ;
+    lv2:optionalFeature lv2:hardRTCapable ;
+    ui:ui <https://thehawk.audio/lv2/tuner#ui> ;
+    rdfs:comment "Chromatic tuner for guitar and bass on Linux." ;
+
+    lv2:port [
+        a lv2:InputPort , lv2:AudioPort ;
+        lv2:index 0 ; lv2:symbol "in" ; lv2:name "In"
+    ] , [
+        a lv2:OutputPort , lv2:AudioPort ;
+        lv2:index 1 ; lv2:symbol "out" ; lv2:name "Out"
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 2 ; lv2:symbol "active" ; lv2:name "Dim/Mute Active" ;
+        lv2:default 0 ; lv2:minimum 0 ; lv2:maximum 1 ;
+        lv2:portProperty lv2:toggled
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 3 ; lv2:symbol "dim_db" ; lv2:name "Dim Amount" ;
+        lv2:default -12.0 ; lv2:minimum -60.0 ; lv2:maximum 0.0 ;
+        units:unit units:db
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 4 ; lv2:symbol "note" ; lv2:name "Detected Note" ;
+        lv2:minimum 0 ; lv2:maximum 127 ;
+        lv2:portProperty lv2:enumeration , lv2:integer ;
+        lv2:scalePoint
+            [ rdfs:label "C-1" ; rdf:value 0 ] ,
+            [ rdfs:label "C#-1" ; rdf:value 1 ] ,
+            [ rdfs:label "D-1" ; rdf:value 2 ] ,
+            [ rdfs:label "D#-1" ; rdf:value 3 ] ,
+            [ rdfs:label "E-1" ; rdf:value 4 ] ,
+            [ rdfs:label "F-1" ; rdf:value 5 ] ,
+            [ rdfs:label "F#-1" ; rdf:value 6 ] ,
+            [ rdfs:label "G-1" ; rdf:value 7 ] ,
+            [ rdfs:label "G#-1" ; rdf:value 8 ] ,
+            [ rdfs:label "A-1" ; rdf:value 9 ] ,
+            [ rdfs:label "A#-1" ; rdf:value 10 ] ,
+            [ rdfs:label "B-1" ; rdf:value 11 ] ,
+            [ rdfs:label "C0" ; rdf:value 12 ] ,
+            [ rdfs:label "C#0" ; rdf:value 13 ] ,
+            [ rdfs:label "D0" ; rdf:value 14 ] ,
+            [ rdfs:label "D#0" ; rdf:value 15 ] ,
+            [ rdfs:label "E0" ; rdf:value 16 ] ,
+            [ rdfs:label "F0" ; rdf:value 17 ] ,
+            [ rdfs:label "F#0" ; rdf:value 18 ] ,
+            [ rdfs:label "G0" ; rdf:value 19 ] ,
+            [ rdfs:label "G#0" ; rdf:value 20 ] ,
+            [ rdfs:label "A0" ; rdf:value 21 ] ,
+            [ rdfs:label "A#0" ; rdf:value 22 ] ,
+            [ rdfs:label "B0" ; rdf:value 23 ] ,
+            [ rdfs:label "C1" ; rdf:value 24 ] ,
+            [ rdfs:label "C#1" ; rdf:value 25 ] ,
+            [ rdfs:label "D1" ; rdf:value 26 ] ,
+            [ rdfs:label "D#1" ; rdf:value 27 ] ,
+            [ rdfs:label "E1" ; rdf:value 28 ] ,
+            [ rdfs:label "F1" ; rdf:value 29 ] ,
+            [ rdfs:label "F#1" ; rdf:value 30 ] ,
+            [ rdfs:label "G1" ; rdf:value 31 ] ,
+            [ rdfs:label "G#1" ; rdf:value 32 ] ,
+            [ rdfs:label "A1" ; rdf:value 33 ] ,
+            [ rdfs:label "A#1" ; rdf:value 34 ] ,
+            [ rdfs:label "B1" ; rdf:value 35 ] ,
+            [ rdfs:label "C2" ; rdf:value 36 ] ,
+            [ rdfs:label "C#2" ; rdf:value 37 ] ,
+            [ rdfs:label "D2" ; rdf:value 38 ] ,
+            [ rdfs:label "D#2" ; rdf:value 39 ] ,
+            [ rdfs:label "E2" ; rdf:value 40 ] ,
+            [ rdfs:label "F2" ; rdf:value 41 ] ,
+            [ rdfs:label "F#2" ; rdf:value 42 ] ,
+            [ rdfs:label "G2" ; rdf:value 43 ] ,
+            [ rdfs:label "G#2" ; rdf:value 44 ] ,
+            [ rdfs:label "A2" ; rdf:value 45 ] ,
+            [ rdfs:label "A#2" ; rdf:value 46 ] ,
+            [ rdfs:label "B2" ; rdf:value 47 ] ,
+            [ rdfs:label "C3" ; rdf:value 48 ] ,
+            [ rdfs:label "C#3" ; rdf:value 49 ] ,
+            [ rdfs:label "D3" ; rdf:value 50 ] ,
+            [ rdfs:label "D#3" ; rdf:value 51 ] ,
+            [ rdfs:label "E3" ; rdf:value 52 ] ,
+            [ rdfs:label "F3" ; rdf:value 53 ] ,
+            [ rdfs:label "F#3" ; rdf:value 54 ] ,
+            [ rdfs:label "G3" ; rdf:value 55 ] ,
+            [ rdfs:label "G#3" ; rdf:value 56 ] ,
+            [ rdfs:label "A3" ; rdf:value 57 ] ,
+            [ rdfs:label "A#3" ; rdf:value 58 ] ,
+            [ rdfs:label "B3" ; rdf:value 59 ] ,
+            [ rdfs:label "C4" ; rdf:value 60 ] ,
+            [ rdfs:label "C#4" ; rdf:value 61 ] ,
+            [ rdfs:label "D4" ; rdf:value 62 ] ,
+            [ rdfs:label "D#4" ; rdf:value 63 ] ,
+            [ rdfs:label "E4" ; rdf:value 64 ] ,
+            [ rdfs:label "F4" ; rdf:value 65 ] ,
+            [ rdfs:label "F#4" ; rdf:value 66 ] ,
+            [ rdfs:label "G4" ; rdf:value 67 ] ,
+            [ rdfs:label "G#4" ; rdf:value 68 ] ,
+            [ rdfs:label "A4" ; rdf:value 69 ] ,
+            [ rdfs:label "A#4" ; rdf:value 70 ] ,
+            [ rdfs:label "B4" ; rdf:value 71 ] ,
+            [ rdfs:label "C5" ; rdf:value 72 ] ,
+            [ rdfs:label "C#5" ; rdf:value 73 ] ,
+            [ rdfs:label "D5" ; rdf:value 74 ] ,
+            [ rdfs:label "D#5" ; rdf:value 75 ] ,
+            [ rdfs:label "E5" ; rdf:value 76 ] ,
+            [ rdfs:label "F5" ; rdf:value 77 ] ,
+            [ rdfs:label "F#5" ; rdf:value 78 ] ,
+            [ rdfs:label "G5" ; rdf:value 79 ] ,
+            [ rdfs:label "G#5" ; rdf:value 80 ] ,
+            [ rdfs:label "A5" ; rdf:value 81 ] ,
+            [ rdfs:label "A#5" ; rdf:value 82 ] ,
+            [ rdfs:label "B5" ; rdf:value 83 ] ,
+            [ rdfs:label "C6" ; rdf:value 84 ] ,
+            [ rdfs:label "C#6" ; rdf:value 85 ] ,
+            [ rdfs:label "D6" ; rdf:value 86 ] ,
+            [ rdfs:label "D#6" ; rdf:value 87 ] ,
+            [ rdfs:label "E6" ; rdf:value 88 ] ,
+            [ rdfs:label "F6" ; rdf:value 89 ] ,
+            [ rdfs:label "F#6" ; rdf:value 90 ] ,
+            [ rdfs:label "G6" ; rdf:value 91 ] ,
+            [ rdfs:label "G#6" ; rdf:value 92 ] ,
+            [ rdfs:label "A6" ; rdf:value 93 ] ,
+            [ rdfs:label "A#6" ; rdf:value 94 ] ,
+            [ rdfs:label "B6" ; rdf:value 95 ] ,
+            [ rdfs:label "C7" ; rdf:value 96 ] ,
+            [ rdfs:label "C#7" ; rdf:value 97 ] ,
+            [ rdfs:label "D7" ; rdf:value 98 ] ,
+            [ rdfs:label "D#7" ; rdf:value 99 ] ,
+            [ rdfs:label "E7" ; rdf:value 100 ] ,
+            [ rdfs:label "F7" ; rdf:value 101 ] ,
+            [ rdfs:label "F#7" ; rdf:value 102 ] ,
+            [ rdfs:label "G7" ; rdf:value 103 ] ,
+            [ rdfs:label "G#7" ; rdf:value 104 ] ,
+            [ rdfs:label "A7" ; rdf:value 105 ] ,
+            [ rdfs:label "A#7" ; rdf:value 106 ] ,
+            [ rdfs:label "B7" ; rdf:value 107 ] ,
+            [ rdfs:label "C8" ; rdf:value 108 ] ,
+            [ rdfs:label "C#8" ; rdf:value 109 ] ,
+            [ rdfs:label "D8" ; rdf:value 110 ] ,
+            [ rdfs:label "D#8" ; rdf:value 111 ] ,
+            [ rdfs:label "E8" ; rdf:value 112 ] ,
+            [ rdfs:label "F8" ; rdf:value 113 ] ,
+            [ rdfs:label "F#8" ; rdf:value 114 ] ,
+            [ rdfs:label "G8" ; rdf:value 115 ] ,
+            [ rdfs:label "G#8" ; rdf:value 116 ] ,
+            [ rdfs:label "A8" ; rdf:value 117 ] ,
+            [ rdfs:label "A#8" ; rdf:value 118 ] ,
+            [ rdfs:label "B8" ; rdf:value 119 ] ,
+            [ rdfs:label "C9" ; rdf:value 120 ] ,
+            [ rdfs:label "C#9" ; rdf:value 121 ] ,
+            [ rdfs:label "D9" ; rdf:value 122 ] ,
+            [ rdfs:label "D#9" ; rdf:value 123 ] ,
+            [ rdfs:label "E9" ; rdf:value 124 ] ,
+            [ rdfs:label "F9" ; rdf:value 125 ] ,
+            [ rdfs:label "F#9" ; rdf:value 126 ] ,
+            [ rdfs:label "G9" ; rdf:value 127 ] ;
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 5 ; lv2:symbol "cents" ; lv2:name "Cents" ;
+        lv2:minimum -50.0 ; lv2:maximum 50.0 ;
+        units:unit units:cent
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 6 ; lv2:symbol "clarity" ; lv2:name "Clarity" ;
+        lv2:minimum 0.0 ; lv2:maximum 1.0
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 7 ; lv2:symbol "freq" ; lv2:name "Frequency (Hz)" ;
+        lv2:minimum 0.0 ; lv2:maximum 5000.0 ;
+        units:unit units:hz
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 8 ; lv2:symbol "voiced" ; lv2:name "Signal Detected" ;
+        lv2:minimum 0 ; lv2:maximum 1 ; lv2:portProperty lv2:toggled
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 9 ; lv2:symbol "in_tune_cents" ; lv2:name "In-Tune Tolerance" ;
+        lv2:default 2.0 ; lv2:minimum 0.5 ; lv2:maximum 10.0 ;
+        units:unit units:cent
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 10 ; lv2:symbol "raise" ; lv2:name "Raise Pitch (flat)" ;
+        lv2:minimum 0 ; lv2:maximum 1 ; lv2:portProperty lv2:toggled
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 11 ; lv2:symbol "in_tune" ; lv2:name "In Tune" ;
+        lv2:minimum 0 ; lv2:maximum 1 ; lv2:portProperty lv2:toggled
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 12 ; lv2:symbol "lower" ; lv2:name "Lower Pitch (sharp)" ;
+        lv2:minimum 0 ; lv2:maximum 1 ; lv2:portProperty lv2:toggled
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 13 ; lv2:symbol "a4" ; lv2:name "Tuning Reference (A4)" ;
+        lv2:default 440.0 ; lv2:minimum 380.0 ; lv2:maximum 500.0 ;
+        units:unit units:hz
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 14 ; lv2:symbol "tuning" ; lv2:name "Tuning" ;
+        lv2:default 0 ; lv2:minimum 0 ; lv2:maximum 49 ;
+        lv2:portProperty lv2:enumeration , lv2:integer ;
+        lv2:scalePoint
+            [ rdfs:label "Standard" ; rdf:value 0 ] ,
+            [ rdfs:label "Drop D" ; rdf:value 1 ] ,
+            [ rdfs:label "Drop C#" ; rdf:value 2 ] ,
+            [ rdfs:label "Drop C" ; rdf:value 3 ] ,
+            [ rdfs:label "Drop B" ; rdf:value 4 ] ,
+            [ rdfs:label "Drop A" ; rdf:value 5 ] ,
+            [ rdfs:label "Drop G" ; rdf:value 6 ] ,
+            [ rdfs:label "Open A" ; rdf:value 7 ] ,
+            [ rdfs:label "Open B" ; rdf:value 8 ] ,
+            [ rdfs:label "Open C" ; rdf:value 9 ] ,
+            [ rdfs:label "Open D" ; rdf:value 10 ] ,
+            [ rdfs:label "Open E" ; rdf:value 11 ] ,
+            [ rdfs:label "Open G" ; rdf:value 12 ] ,
+            [ rdfs:label "Cross-Note Am" ; rdf:value 13 ] ,
+            [ rdfs:label "Cross-Note Cm" ; rdf:value 14 ] ,
+            [ rdfs:label "Cross-Note Dm" ; rdf:value 15 ] ,
+            [ rdfs:label "Cross-Note Em" ; rdf:value 16 ] ,
+            [ rdfs:label "Cross-Note Gm" ; rdf:value 17 ] ,
+            [ rdfs:label "DADGAD" ; rdf:value 18 ] ,
+            [ rdfs:label "Asus4" ; rdf:value 19 ] ,
+            [ rdfs:label "Gsus4" ; rdf:value 20 ] ,
+            [ rdfs:label "Csus4" ; rdf:value 21 ] ,
+            [ rdfs:label "Esus2" ; rdf:value 22 ] ,
+            [ rdfs:label "Eb (Half Step Down)" ; rdf:value 23 ] ,
+            [ rdfs:label "D (Whole Step Down)" ; rdf:value 24 ] ,
+            [ rdfs:label "C# Tuning" ; rdf:value 25 ] ,
+            [ rdfs:label "C Tuning" ; rdf:value 26 ] ,
+            [ rdfs:label "B Tuning" ; rdf:value 27 ] ,
+            [ rdfs:label "Bb Tuning" ; rdf:value 28 ] ,
+            [ rdfs:label "A Tuning" ; rdf:value 29 ] ,
+            [ rdfs:label "Ab Tuning" ; rdf:value 30 ] ,
+            [ rdfs:label "G Tuning" ; rdf:value 31 ] ,
+            [ rdfs:label "F# Tuning" ; rdf:value 32 ] ,
+            [ rdfs:label "F Tuning" ; rdf:value 33 ] ,
+            [ rdfs:label "All Fourths" ; rdf:value 34 ] ,
+            [ rdfs:label "Major Thirds" ; rdf:value 35 ] ,
+            [ rdfs:label "All Fifths" ; rdf:value 36 ] ,
+            [ rdfs:label "New Standard (Fripp)" ; rdf:value 37 ] ,
+            [ rdfs:label "Ostrich" ; rdf:value 38 ] ,
+            [ rdfs:label "Bass (4-string)" ; rdf:value 39 ] ,
+            [ rdfs:label "Bass Drop D (4)" ; rdf:value 40 ] ,
+            [ rdfs:label "Bass Eb (4)" ; rdf:value 41 ] ,
+            [ rdfs:label "Bass D (4)" ; rdf:value 42 ] ,
+            [ rdfs:label "Bass (5-string)" ; rdf:value 43 ] ,
+            [ rdfs:label "Bass Drop A (5)" ; rdf:value 44 ] ,
+            [ rdfs:label "Bass (6-string)" ; rdf:value 45 ] ,
+            [ rdfs:label "7-String Standard" ; rdf:value 46 ] ,
+            [ rdfs:label "7-String Drop A" ; rdf:value 47 ] ,
+            [ rdfs:label "8-String Standard" ; rdf:value 48 ] ,
+            [ rdfs:label "8-String Drop E" ; rdf:value 49 ]
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 15 ; lv2:symbol "ref_active" ; lv2:name "Reference Tone" ;
+        lv2:default 0 ; lv2:minimum 0 ; lv2:maximum 1 ;
+        lv2:portProperty lv2:toggled
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 16 ; lv2:symbol "ref_note" ; lv2:name "Reference Note" ;
+        lv2:default 40 ; lv2:minimum 0 ; lv2:maximum 127 ;
+        lv2:portProperty lv2:integer
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 17 ; lv2:symbol "ping_enable" ; lv2:name "In-Tune Ping" ;
+        lv2:default 0 ; lv2:minimum 0 ; lv2:maximum 1 ;
+        lv2:portProperty lv2:toggled
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 18 ; lv2:symbol "level" ; lv2:name "Input Level" ;
+        lv2:minimum 0.0 ; lv2:maximum 1.0
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 19 ; lv2:symbol "sensitivity" ; lv2:name "Sensitivity" ;
+        lv2:default 0.5 ; lv2:minimum 0.0 ; lv2:maximum 1.0
+    ] .
+
+<https://thehawk.audio/lv2/tuner#ui>
+    a ui:X11UI ;
+    ui:binary <hawk_ui.so> ;
+    lv2:requiredFeature ui:idleInterface ;
+    lv2:optionalFeature ui:resize ;
+    lv2:extensionData ui:idleInterface .

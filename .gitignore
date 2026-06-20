@@ -1,0 +1,22 @@
+# Build output
+/build/
+/tmp/
+/dist/
+
+# Compiled objects and libraries
+*.o
+*.so
+*.a
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Editor and OS cruft
+*~
+.DS_Store
+
+# Local-only working folders (not published)
+/docs/
+/experiments/
+/assets/docs/
