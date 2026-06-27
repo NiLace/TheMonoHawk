@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build and install the LV2 bundle to ~/.lv2/thehawk.lv2/.
+# Build and install the LV2 bundle to ~/.lv2/themonohawk.lv2/.
 #
 # IMPORTANT: libraries are replaced atomically (write a temp file, then rename
 # over the target). Overwriting a .so *in place* while a host (Ardour) has it
@@ -9,7 +9,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-BUNDLE="$HOME/.lv2/thehawk.lv2"
+BUNDLE="$HOME/.lv2/themonohawk.lv2"
 mkdir -p "$BUNDLE"
 
 ninja -C "$ROOT/build"

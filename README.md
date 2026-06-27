@@ -1,8 +1,8 @@
-# The Hawk
+# The Mono Hawk
 
-<p align="center"><img src="assets/images/Hawk_left.png" alt="The Hawk" width="106"></p>
+<p align="center"><img src="assets/images/Hawk_left.png" alt="The Mono Hawk" width="106"></p>
 
-The Hawk is a chromatic tuner for guitar and bass that runs on Linux as an LV2
+The Mono Hawk is a chromatic tuner for guitar and bass that runs on Linux as an LV2
 plugin, with its own hardware-style interface. It tracks a single note to
 **better than a cent**, down to a 5/6-string bass low B (~31 Hz), and pairs that
 precision with a display you can read at a glance while you play.
@@ -138,10 +138,10 @@ has it memory-mapped will corrupt the running process and take the host down
 with it.
 
 ```sh
-./scripts/install.sh     # builds, then installs to ~/.lv2/thehawk.lv2/
+./scripts/install.sh     # builds, then installs to ~/.lv2/themonohawk.lv2/
 ```
 
-In a host like Ardour it shows up as **The Hawk Tuner**. Put it on a **mono**
+In a host like Ardour it shows up as **The Mono Hawk Tuner**. Put it on a **mono**
 track and open its interface. If you rebuild in a way that changes the plugin's
 port count, remove and re-add it so the host re-reads the ports.
 
@@ -171,3 +171,7 @@ C++, but I have not reviewed every line by hand — so please treat it according
 
 Released under the **GNU General Public License v3.0 or later** — see
 [`LICENSE`](LICENSE).
+
+## Author
+
+Made by **NL Sounds** — <https://github.com/NiLace> · nilace@nylarea.com

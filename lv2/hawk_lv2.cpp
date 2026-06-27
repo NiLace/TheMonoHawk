@@ -24,7 +24,7 @@
 #include <thread>
 #include <vector>
 
-#define HAWK_URI "https://thehawk.audio/lv2/tuner"
+#define HAWK_URI "https://themonohawk.audio/lv2/tuner"
 
 namespace {
 

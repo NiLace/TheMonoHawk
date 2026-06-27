@@ -4,14 +4,22 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
 
-<https://thehawk.audio/lv2/tuner>
+<https://themonohawk.audio/lv2/tuner>
     a lv2:Plugin , lv2:AnalyserPlugin ;
-    doap:name "The Hawk Tuner" ;
+    doap:name "The Mono Hawk Tuner" ;
+    doap:homepage <https://github.com/NiLace> ;
+    doap:maintainer [
+        a foaf:Organization ;
+        foaf:name "NL Sounds" ;
+        foaf:homepage <https://github.com/NiLace> ;
+        foaf:mbox <mailto:nilace@nylarea.com>
+    ] ;
     lv2:minorVersion 1 ;
     lv2:microVersion 0 ;
     lv2:optionalFeature lv2:hardRTCapable ;
-    ui:ui <https://thehawk.audio/lv2/tuner#ui> ;
+    ui:ui <https://themonohawk.audio/lv2/tuner#ui> ;
     rdfs:comment "Chromatic tuner for guitar and bass on Linux." ;
 
     lv2:port [
@@ -285,7 +293,7 @@
         lv2:default 0.5 ; lv2:minimum 0.0 ; lv2:maximum 1.0
     ] .
 
-<https://thehawk.audio/lv2/tuner#ui>
+<https://themonohawk.audio/lv2/tuner#ui>
     a ui:X11UI ;
     ui:binary <hawk_ui.so> ;
     lv2:requiredFeature ui:idleInterface ;

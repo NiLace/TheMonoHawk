@@ -27,7 +27,7 @@
 #include "tunings.hpp"   // shared tuning table (Tuning, TUNINGS, build_targets) —
                          // single source of truth with the DSP (src/tunings.hpp)
 
-#define HAWK_UI_URI "https://thehawk.audio/lv2/tuner#ui"
+#define HAWK_UI_URI "https://themonohawk.audio/lv2/tuner#ui"
 
 namespace {
 
