@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // Test harness for the note-mapping core.
 //
 // This program is meant to be *read as numbers*: it feeds known frequencies in,

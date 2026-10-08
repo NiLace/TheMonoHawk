@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // The Hawk — LV2 X11 + Cairo GUI.
 //
 // A self-contained, framework-free tuner display. The host (e.g. Ardour) embeds

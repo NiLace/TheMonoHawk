@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (C) The NL Sounds contributors
 # Command-line tuner: the detection core wired to a terminal. Not the plugin;
 # a way to point an instrument at the core today.
 

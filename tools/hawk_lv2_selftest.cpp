@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // Headless host test for the LV2 plugin. Loads hawk.so the way a host would
 // (dlopen + lv2_descriptor), feeds it a known tone in audio-sized blocks, lets
 // the worker thread run, and reads the output ports back. Proves the whole

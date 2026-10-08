@@ -9,6 +9,7 @@
 <https://themonohawk.audio/lv2/tuner>
     a lv2:Plugin , lv2:AnalyserPlugin ;
     doap:name "The Mono Hawk Tuner" ;
+    doap:license <https://spdx.org/licenses/AGPL-3.0-only> ;
     doap:homepage <https://github.com/NiLace> ;
     doap:maintainer [
         a foaf:Organization ;

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (C) The NL Sounds contributors
 # The format-agnostic core. Knows nothing about LV2, CLAP, Pugl or Cairo.
 # The plugin wrappers (added in later layers) link against this same library.
 

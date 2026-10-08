@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // Test harness for the fine heterodyne stage, exercised through the real
 // pipeline: coarse detector picks the note, the note's exact frequency becomes
 // the heterodyne target, the fine stage reports sub-cent deviation.

@@ -1,6 +1,8 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (C) The NL Sounds contributors
 project('themonohawk', 'cpp',
   version : '0.1.0',
-  license : 'GPL-3.0-or-later',
+  license : 'AGPL-3.0-only',
   default_options : [
     'cpp_std=c++17',
     'warning_level=3',

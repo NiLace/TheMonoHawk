@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (C) The NL Sounds contributors
 # Build and install the LV2 bundle to ~/.lv2/themonohawk.lv2/.
 #
 # IMPORTANT: libraries are replaced atomically (write a temp file, then rename

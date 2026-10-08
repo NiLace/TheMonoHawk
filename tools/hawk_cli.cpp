@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // The Hawk — command-line tuner.
 //
 // NOT the LV2 plugin: it has no GUI and you cannot insert it on a track. It is

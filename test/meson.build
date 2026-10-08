@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (C) The NL Sounds contributors
 # Tests for the core. Each test executable prints a table of numbers and exits
 # non-zero on any failure, so `meson test` reports honest pass/fail.
 

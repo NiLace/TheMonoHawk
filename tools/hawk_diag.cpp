@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // Offline diagnostic: run the real detector across a recorded signal and
 // dissect it, so we can see why the cents reading wanders / reads sharp.
 //

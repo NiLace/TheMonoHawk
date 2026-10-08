@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // Reliability stress tests for the MPM pitch detector.
 //
 // Pure sines (test_pitch_detector.cpp) prove precision on the easy case. Real

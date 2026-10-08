@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // Test harness for the MPM pitch detector.
 //
 // Feed synthetic sine waves at exactly known frequencies, detect them, and

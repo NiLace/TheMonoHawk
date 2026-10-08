@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // The Hawk — LV2 plugin (DSP / audio side). The faceplate GUI lives separately
 // in hawk_ui.cpp; this file has no UI code.
 //

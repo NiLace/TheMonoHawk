@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (C) The NL Sounds contributors
 # The LV2 wrapper. Builds hawk.so; the bundle is assembled from this plus the
 # .ttl files (see scripts in the repo / README for installing to ~/.lv2).
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) The NL Sounds contributors
 // Shared tuning table — the single source of truth for both the GUI (draws the
 // string row, the tuning menu) and the DSP (derives the per-string targets used
 // to gate the in-tune ping). Keeping it here means the note data can never drift
