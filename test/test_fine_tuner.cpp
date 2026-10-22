@@ -160,6 +160,51 @@ int main()
                     ok ? "PASS" : "FAIL", fs.cents, ff.cents);
     }
 
+    // ---- the octave trap, and the guard against it ------------------------
+    // Handed a target an octave (or a semitone) away from what is actually playing, the
+    // heterodyne locks onto the wrong thing and returns a confident, precise, wrong reading.
+    // The guard must reject those. Note the returned magnitudes are NOT stable across material,
+    // so the test asserts only that the reading is REJECTED, never a particular value.
+    std::printf("\n== fine stage must not trust a wrong target ==\n");
+    {
+        const std::vector<double> partials = { 1.0, 0.5, 0.3, 0.15 };
+        auto tone = make_tone(82.407, frame_length(82.407), partials);
+        const struct { const char* nm; double target; } bad[] = {
+            { "octave up",   164.814 },
+            { "octave down",  41.203 },
+            { "semitone up",  87.307 },
+        };
+        for (const auto& b : bad) {
+            ++checks_run;
+            auto f = fine.refine(tone.data(), tone.size(), b.target);
+            const bool ok = !f.valid;
+            if (!ok) ++checks_failed;
+            std::printf("  [%s] %-13s target -> %+8.2fc, valid=%d (want 0)\n",
+                        ok ? "PASS" : "FAIL", b.nm, f.cents, f.valid ? 1 : 0);
+        }
+        // ...and the other half, which matters just as much: a tuner exists to read strings that
+        // are OUT of tune. The coarse stage snaps to the nearest note, so an honest deviation is
+        // bounded by +-50 cents. If the guard fired on any of these it would break the product.
+        ++checks_run;
+        int spurious = 0, skipped = 0;
+        double worst = 0.0;
+        for (double dc = -49.0; dc <= 49.5; dc += 7.0) {
+            auto x = make_tone(detune(82.407, dc), frame_length(82.407), partials);
+            auto c = coarse.analyze(x.data(), x.size());
+            if (c.frequency <= 0.0) { ++skipped; continue; }   // a deaf coarse stage must not pass this arm
+            double tgt = hawk::note_to_frequency(
+                hawk::frequency_to_note(c.frequency).midi_note);
+            auto f = fine.refine(x.data(), x.size(), tgt);
+            if (!f.valid) ++spurious;
+            if (std::fabs(f.cents) > worst) worst = std::fabs(f.cents);
+        }
+        const bool ok = (spurious == 0 && skipped == 0);
+        if (!ok) ++checks_failed;
+        std::printf("  [%s] legitimate detunings -49..+49c: %d rejected, %d not detected (want 0, 0), "
+                    "worst reading %.2fc vs the 60c guard\n",
+                    ok ? "PASS" : "FAIL", spurious, skipped, worst);
+    }
+
     std::printf("\n%d checks, %d failed\n", checks_run, checks_failed);
     return checks_failed == 0 ? 0 : 1;
 }

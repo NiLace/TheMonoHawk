@@ -9,7 +9,7 @@ namespace hawk {
 // Result of mapping a detected frequency onto the equal-tempered scale.
 struct NoteReading {
     int    midi_note = 0;    // MIDI note number (69 = A4)
-    double cents     = 0.0;  // deviation from that note, in range (-50, +50]
+    double cents     = 0.0;  // deviation from that note, in range [-50, +50)
     double frequency = 0.0;  // the input frequency (Hz), echoed back
     bool   valid     = false;// false when the input frequency is non-positive
 };

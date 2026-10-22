@@ -130,6 +130,26 @@ int main()
                     ok ? "PASS" : "FAIL", e.voiced ? 1 : 0);
     }
 
+    // ---- DC offset must not blind the detector ----------------------------
+    // Before the mean removal in analyze(), an offset of 0.30 made this return f = 0 and
+    // clarity = 0 -- not a degraded reading, no reading at all, because the hump search needs
+    // the NSDF's zero crossings and DC removes them. The reading must now be independent of
+    // the offset, so the test asserts across the whole range rather than at one value.
+    std::printf("\n== DC offset must not blind the detector ==\n");
+    for (double dc : { 0.0, 0.15, 0.30, 0.50, -0.40 }) {
+        ++checks_run;
+        auto x = make_sine(82.407, frame_length(82.407), 0.4);
+        for (auto& v : x) v += static_cast<float>(dc);
+        const hawk::PitchEstimate e = detector.analyze(x.data(), x.size());
+        const double cents = e.frequency > 0.0
+                           ? 1200.0 * std::log2(e.frequency / 82.407) : 1e9;
+        const bool ok = e.voiced && std::fabs(cents) < 1.0 && e.clarity > 0.95;
+        if (!ok) ++checks_failed;
+        std::printf("  [%s] DC %+0.2f -> %8.3f Hz  %+6.2f c  clarity %.3f\n",
+                    ok ? "PASS" : "FAIL", dc, e.frequency, e.frequency > 0 ? cents : 0.0,
+                    e.clarity);
+    }
+
     std::printf("\n%d checks, %d failed\n", checks_run, checks_failed);
     return checks_failed == 0 ? 0 : 1;
 }

@@ -17,9 +17,10 @@ AGPL-3.0-only, and say where it comes from.
 
 ## Sign your commits (DCO)
 
-Commit with `git commit -s`. It adds a `Signed-off-by: Name <email>` line, by which you certify the
-[Developer Certificate of Origin 1.1](https://developercertificate.org/): you wrote the change, or
-otherwise have the right to submit it under this licence. A pseudonym is fine.
+If you send a contribution, commit with `git commit -s`. It adds a `Signed-off-by: Name <email>` line,
+by which you certify the [Developer Certificate of Origin 1.1](https://developercertificate.org/): you
+wrote the change, or otherwise have the right to submit it under this licence. A pseudonym is fine.
+Contributions without it are not merged. (The maintainer's own commits do not carry the line.)
 
 ## New source files
 

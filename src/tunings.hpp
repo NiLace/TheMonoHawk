@@ -11,16 +11,17 @@
 #pragma once
 
 #include <cstddef>
-#include <cstring>
 
 struct Tuning {
     const char* name;
     int         count;
     const char* notes[8];   // up to 8 strings (8-string guitar)
+    // An all-unison tuning: the targets spread over the strings' natural registers (see build_targets)
+    bool        spread_registers = false;
 };
 
 // Index order MUST match the scalePoints in hawk.ttl's "tuning" port.
-inline const Tuning TUNINGS[] = {
+inline constexpr Tuning TUNINGS[] = {
     { "Standard",            6, { "E",  "A",  "D",  "G",  "B",  "E" } },
     // Drop tunings (lower the 6th, sometimes more).
     { "Drop D",              6, { "D",  "A",  "D",  "G",  "B",  "E" } },
@@ -65,7 +66,7 @@ inline const Tuning TUNINGS[] = {
     { "Major Thirds",        6, { "E",  "G#", "C",  "E",  "G#", "C" } },
     { "All Fifths",          6, { "C",  "G",  "D",  "A",  "E",  "B" } },
     { "New Standard (Fripp)",6, { "C",  "G",  "D",  "A",  "E",  "G" } },
-    { "Ostrich",             6, { "E",  "E",  "E",  "E",  "E",  "E" } },
+    { "Ostrich",             6, { "E",  "E",  "E",  "E",  "E",  "E" }, true },
     // Bass.
     { "Bass (4-string)",     4, { "E",  "A",  "D",  "G" } },
     { "Bass Drop D (4)",     4, { "D",  "A",  "D",  "G" } },
@@ -87,10 +88,10 @@ inline constexpr int TUNING_COUNT = (int)(sizeof(TUNINGS) / sizeof(TUNINGS[0]));
 // letter that is >= the previous string), which reproduces how a guitar/bass
 // actually ascends. MIDI: C-1=0, so E2=40, E1=28, B0=23. These are the only
 // octave data we author; everything else falls out of the note letters.
-inline const int TUNING_ROOT[] = {
+inline constexpr int TUNING_ROOT[] = {
     40,                              // Standard          E2
     38, 37, 36, 35, 33, 31,          // Drop D/C#/C/B/A/G
-    40, 35, 36, 38, 40, 38,          // Open A/B/C/D/E/G   (Open B low B1=35: uncertain)
+    40, 35, 36, 38, 40, 38,          // Open A/B/C/D/E/G   (Open B tuned down to B1)
     40, 36, 38, 40, 38,              // Cross-Note Am/Cm/Dm/Em/Gm
     38, 40, 38, 36, 40,              // DADGAD / Asus4 / Gsus4 / Csus4 / Esus2
     39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29,  // Eb..F lowered whole-instrument
@@ -99,6 +100,22 @@ inline const int TUNING_ROOT[] = {
     35, 33,                          // 7-String Standard / Drop A   B1 / A1
     30, 28,                          // 8-String Standard / Drop E   F#1 / E1
 };
+// Longest tuning in the table, computed from the table itself.
+//
+// ⚠ This is not decoration. build_targets() writes tu.count entries into a buffer whose size it is
+// never told. The longest tuning is the 8-string standard, EXACTLY 8, and the per-string arrays of
+// the plugin and the GUI are sized 8: adding one nine-string tuning would corrupt
+// them silently, and nine-string guitars exist. The assert below turns that into a build error,
+// and TUNING_MAX_STRINGS lets a caller size its buffer from the data instead of from a guess.
+inline constexpr int tuning_max_strings() {
+    int m = 0;
+    for (int i = 0; i < (int)(sizeof(TUNINGS) / sizeof(TUNINGS[0])); ++i)
+        if (TUNINGS[i].count > m) m = TUNINGS[i].count;
+    return m;
+}
+inline constexpr int TUNING_MAX_STRINGS = tuning_max_strings();
+static_assert(TUNING_MAX_STRINGS <= 8, "the per-string arrays of the plugin and the GUI hold 8 strings");
+
 static_assert(sizeof(TUNING_ROOT) / sizeof(int) == TUNING_COUNT,
               "TUNING_ROOT must have one entry per tuning");
 
@@ -118,7 +135,7 @@ inline int build_targets(int t, int* out) {
     // would collapse every string onto one pitch (and the per-string checklist
     // would light all at once). Spread the E across the strings' natural
     // registers instead, so each target is a real, separately-tunable string.
-    if (std::strcmp(tu.name, "Ostrich") == 0) {
+    if (tu.spread_registers) {
         static const int spread[6] = { 40, 40, 52, 52, 64, 64 };  // E2 E2 E3 E3 E4 E4
         for (int i = 0; i < 6; ++i) out[i] = spread[i];
         return 6;

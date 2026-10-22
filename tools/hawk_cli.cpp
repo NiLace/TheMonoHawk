@@ -50,14 +50,10 @@ int main(int argc, char** argv)
         if (got == 0) break;
 
         // Slide the window left by `got` samples and append the new ones.
-        if (got < window_size) {
-            std::memmove(window.data(), window.data() + got,
-                         (window_size - got) * sizeof(float));
-            std::memcpy(window.data() + (window_size - got), hop.data(),
-                        got * sizeof(float));
-        } else {
-            std::memcpy(window.data(), hop.data() + (got - window_size),
-                        window_size * sizeof(float));
+        {
+            const std::size_t k = (got < window_size) ? got : window_size;
+            std::memmove(window.data(), window.data() + k, (window_size - k) * sizeof(float));
+            std::memcpy(window.data() + (window_size - k), hop.data() + (got - k), k * sizeof(float));
         }
 
         const hawk::PitchEstimate c = coarse.analyze(window.data(),

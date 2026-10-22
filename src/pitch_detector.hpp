@@ -22,9 +22,19 @@ struct PitchEstimate {
 // selection to resist octave errors, plus parabolic interpolation for
 // sub-sample (hence sub-cent) precision.
 //
-// This is the "coarse stage" of the detection core described in design-spec.md
-// §3.1. The implementation favours clarity over speed; the O(N^2) NSDF will be
-// replaced by an FFT-based autocorrelation when real-time cost matters.
+// This is the "coarse stage" of the detection core. The NSDF is computed in O(N log N) via an
+// FFT-based autocorrelation -- see the fft_ workspace below and the derivation in analyze().
+// ⚠ ONE INSTANCE PER THREAD.
+//
+// analyze()/refine() are marked const and described as pure functions of their input, and that is
+// true of the RESULT -- but they write through a mutable workspace, so two threads sharing one
+// instance would tear each other's scratch buffers apart. The const is about the logical value, not
+// about thread safety, and the two are easy to confuse in exactly this shape.
+//
+// Every per-call vector lives in the object (no heap traffic per analysis), so there is substantial
+// mutable state behind that const.
+// The plugin uses a single instance on a single worker thread, which is fine; anything else needs
+// its own instance (or thread_local).
 class PitchDetector {
 public:
     // min_frequency / max_frequency bound the search to a musical range, so the
@@ -50,9 +60,15 @@ private:
     // FFT workspace for the O(N log N) autocorrelation (lazily sized to the
     // padded frame on first use; reused thereafter). Mutable: a per-call cache
     // that doesn't change the logical (pure-function) result of analyze().
-    mutable std::unique_ptr<FFT<float>> fft_;
-    mutable std::vector<float>   re_, im_;
+    mutable std::unique_ptr<RealFFT<float>> fft_;
+    mutable std::vector<float>   re_;        /* padded frame, then reused for the power spectrum */
+    mutable std::vector<float>   xr_, xi_;   /* half spectrum, n/2 + 1 bins */
     mutable std::vector<double>  prefix_;
+    // High-passed copy of the frame. The NSDF is computed from THIS, never from the caller's
+    // buffer -- see the rationale in analyze().
+    mutable std::vector<float>   hp_;
+    mutable std::vector<double>      nsdf_;    /* hoisted with the rest: see fine_tuner.hpp */
+    mutable std::vector<std::size_t> maxima_;
 };
 
 } // namespace hawk

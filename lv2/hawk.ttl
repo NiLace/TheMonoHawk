@@ -5,10 +5,11 @@
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
 @prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
 @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix opts:  <http://lv2plug.in/ns/ext/options#> .
 
-<https://themonohawk.audio/lv2/tuner>
+<https://nylarea.com/lv2/themonohawk>
     a lv2:Plugin , lv2:AnalyserPlugin ;
-    doap:name "The Mono Hawk Tuner" ;
+    doap:name "The Mono Hawk" ;
     doap:license <https://spdx.org/licenses/AGPL-3.0-only> ;
     doap:homepage <https://github.com/NiLace> ;
     doap:maintainer [
@@ -17,10 +18,10 @@
         foaf:homepage <https://github.com/NiLace> ;
         foaf:mbox <mailto:nilace@nylarea.com>
     ] ;
-    lv2:minorVersion 1 ;
+    lv2:minorVersion 2 ;
     lv2:microVersion 0 ;
     lv2:optionalFeature lv2:hardRTCapable ;
-    ui:ui <https://themonohawk.audio/lv2/tuner#ui> ;
+    ui:ui <https://nylarea.com/lv2/themonohawk#ui> ;
     rdfs:comment "Chromatic tuner for guitar and bass on Linux." ;
 
     lv2:port [
@@ -292,11 +293,29 @@
         a lv2:InputPort , lv2:ControlPort ;
         lv2:index 19 ; lv2:symbol "sensitivity" ; lv2:name "Sensitivity" ;
         lv2:default 0.5 ; lv2:minimum 0.0 ; lv2:maximum 1.0
+    ] , [
+        a lv2:OutputPort , lv2:ControlPort ;
+        lv2:index 20 ; lv2:symbol "strobe_phase" ; lv2:name "Strobe Phase" ;
+        lv2:minimum -3.14159265 ; lv2:maximum 3.14159265 ;
+        rdfs:comment "Phase of the string against the reference note, in radians: still when in tune, increasing when sharp, decreasing when flat (2 pi times the offset in Hz, per second). For a strobe display."
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 21 ; lv2:symbol "strobe_mode" ; lv2:name "Strobe View" ;
+        lv2:default 0 ; lv2:minimum 0 ; lv2:maximum 1 ;
+        lv2:portProperty lv2:toggled ;
+        rdfs:comment "The interface shows the strobe instead of the meter. Display only: the sound and the readings do not change."
+    ] , [
+        a lv2:InputPort , lv2:ControlPort ;
+        lv2:index 22 ; lv2:symbol "enabled" ; lv2:name "Enabled" ;
+        lv2:designation lv2:enabled ;
+        lv2:default 1 ; lv2:minimum 0 ; lv2:maximum 1 ;
+        lv2:portProperty lv2:toggled
     ] .
 
-<https://themonohawk.audio/lv2/tuner#ui>
+<https://nylarea.com/lv2/themonohawk#ui>
     a ui:X11UI ;
     ui:binary <hawk_ui.so> ;
     lv2:requiredFeature ui:idleInterface ;
     lv2:optionalFeature ui:resize ;
+    opts:supportedOption ui:scaleFactor ;
     lv2:extensionData ui:idleInterface .
