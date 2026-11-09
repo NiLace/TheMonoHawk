@@ -41,14 +41,13 @@ else
     echo "no ninja build tree -- compiling directly"
     OUT="$(mktemp -d)"
     trap 'rm -rf "$OUT"' EXIT
-    g++ -std=c++17 -O3 -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread -fPIC -shared -fvisibility=hidden -I "$ROOT/src" \
-        "$ROOT/lv2/hawk_lv2.cpp" "$ROOT/src/pitch_detector.cpp" \
-        "$ROOT/src/fine_tuner.cpp" "$ROOT/src/note_mapping.cpp" \
-        -o "$OUT/hawk.so" -lpthread $(pkg-config --cflags lv2 2>/dev/null || true)
-    g++ -std=c++17 -O3 -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread -fPIC -shared -fvisibility=hidden -I "$ROOT/src" \
-        -fvisibility-inlines-hidden -fno-gnu-unique \
-        "$ROOT/lv2/hawk_ui.cpp" -o "$OUT/hawk_ui.so" \
-        $(pkg-config --cflags --libs cairo x11 freetype2)
+    gcc -std=gnu11 -O3 -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread -fPIC -shared -fvisibility=hidden -I "$ROOT/src" \
+        "$ROOT/lv2/hawk_lv2.c" "$ROOT/src/pitch_detector.c" \
+        "$ROOT/src/fine_tuner.c" "$ROOT/src/note_mapping.c" \
+        -o "$OUT/hawk.so" -lpthread -lm $(pkg-config --cflags lv2 2>/dev/null || true)
+    gcc -std=gnu11 -O3 -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread -fPIC -shared -fvisibility=hidden -I "$ROOT/src" \
+        "$ROOT/lv2/hawk_ui.c" -o "$OUT/hawk_ui.so" \
+        $(pkg-config --cflags --libs cairo x11 freetype2) -lm
 fi
 
 mkdir -p "$BUNDLE"

@@ -1,0 +1,62 @@
+/* SPDX-License-Identifier: AGPL-3.0-only */
+/* Copyright (C) The NL Sounds contributors */
+#include "note_mapping.h"
+
+#include <math.h>
+#include <stdio.h>
+
+
+// Twelve-tone equal temperament: a semitone is the 12th root of 2.
+static const double semitones_per_octave = 12.0;
+
+// MIDI note 69 is A4 (the reference pitch). All mapping is relative to it.
+static const int a4_midi_note = 69;
+
+double hawk_note_to_frequency(int midi_note, double a4_hz)
+{
+    const double semitones_from_a4 =
+        (double)(midi_note - a4_midi_note);
+    return a4_hz * pow(2.0, semitones_from_a4 / semitones_per_octave);
+}
+
+NoteReading hawk_frequency_to_note(double frequency_hz, double a4_hz)
+{
+    NoteReading reading = { 0, 0.0, 0.0, false };
+    reading.frequency = frequency_hz;
+
+    // A non-positive frequency has no musical meaning; report it as invalid
+    // rather than feeding it into log2() and returning nonsense.
+    if (frequency_hz <= 0.0 || a4_hz <= 0.0) {
+        return reading;
+    }
+
+    // Real-valued MIDI position: how many semitones above A4 this frequency is,
+    // offset so that A4 lands on its MIDI number.
+    const double midi_real =
+        a4_midi_note +
+        semitones_per_octave * log2(frequency_hz / a4_hz);
+
+    const int nearest = (int)lround(midi_real);
+
+    reading.midi_note = nearest;
+    reading.cents     = (midi_real - nearest) * 100.0;
+    reading.valid     = true;
+    return reading;
+}
+
+const char* hawk_note_name(int midi_note, char* out)
+{
+    static const char* const names[12] = {
+        "C", "C#", "D", "D#", "E", "F",
+        "F#", "G", "G#", "A", "A#", "B"
+    };
+
+    // Floor-divide toward negative infinity so that octave numbering stays
+    // correct for any note. In scientific pitch notation MIDI 0 is C-1.
+    const int note_index = ((midi_note % 12) + 12) % 12;
+    const int octave     = (midi_note / 12) - 1 -
+                           ((midi_note % 12 < 0) ? 1 : 0);
+
+    snprintf(out, HAWK_NOTE_NAME_LEN, "%s%d", names[note_index], octave);
+    return out;
+}

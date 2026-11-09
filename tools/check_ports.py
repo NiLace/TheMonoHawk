@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # Copyright (C) The NL Sounds contributors
 """check_ports.py -- the port map is written in three places by hand: lv2/hawk.ttl, the PortIndex enum of
-lv2/hawk_lv2.cpp and the P_* constants of every probe in tools/. Nothing compared them, and a probe that
+lv2/hawk_lv2.c and the P_* constants of every probe in tools/. Nothing compared them, and a probe that
 pokes the wrong port measures a plugin in a configuration nobody runs and reports it as fine. This reads the
 TTL and checks that the enum lists the same ports in the same order, and that every P_* constant of every
 tool names the right index -- and that P_N / NPORTS is the whole count, i.e. the probe connects every port,
@@ -49,29 +49,29 @@ def main():
         errors.append(f'hawk.ttl: indices are not 0..{n - 1}: {sorted(ttl)}')
     by_symbol = {s: i for i, s in ttl.items()}
 
-    src = ''.join(code_lines(os.path.join(ROOT, 'lv2', 'hawk_lv2.cpp'), '//'))
+    src = ''.join(code_lines(os.path.join(ROOT, 'lv2', 'hawk_lv2.c'), '//'))
     m = re.search(r'enum PortIndex \{(.*?)\};', src, re.S)
     names = re.findall(r'PORT_([A-Z0-9_]+)', m.group(1)) if m else []
     if len(names) != n:
-        errors.append(f'hawk_lv2.cpp: PortIndex has {len(names)} ports, hawk.ttl {n}')
+        errors.append(f'hawk_lv2.c: PortIndex has {len(names)} ports, hawk.ttl {n}')
     for i, name in enumerate(names):
         want = ENUM_NAMES.get(name, name.lower())
         if ttl.get(i) != want:
-            errors.append(f'hawk_lv2.cpp: PORT_{name} is index {i}, hawk.ttl has "{ttl.get(i)}" there')
+            errors.append(f'hawk_lv2.c: PORT_{name} is index {i}, hawk.ttl has "{ttl.get(i)}" there')
 
     # the GUI numbers the ports by hand (it does not include the plugin's enum): each must be the TTL's
-    ui = ''.join(code_lines(os.path.join(ROOT, 'lv2', 'hawk_ui.cpp'), '//'))
+    ui = ''.join(code_lines(os.path.join(ROOT, 'lv2', 'hawk_ui.c'), '//'))
     m = re.search(r'enum \{(.*?)\};', ui, re.S)
     ui_ports = re.findall(r'PORT_([A-Z0-9_]+)\s*=\s*(\d+)', m.group(1)) if m else []
     if not ui_ports:
-        errors.append('hawk_ui.cpp: no port table found')
+        errors.append('hawk_ui.c: no port table found')
     for name, val in ui_ports:
         want = UI_NAMES.get(name, name.lower())
         if by_symbol.get(want) != int(val):
-            errors.append(f'hawk_ui.cpp: PORT_{name} = {val}, but "{want}" is port {by_symbol.get(want)}')
+            errors.append(f'hawk_ui.c: PORT_{name} = {val}, but "{want}" is port {by_symbol.get(want)}')
 
     # the tuning port's range is the tuning table's
-    tun = open(os.path.join(ROOT, 'src', 'tunings.hpp'), encoding='utf-8').read()
+    tun = open(os.path.join(ROOT, 'src', 'tunings.h'), encoding='utf-8').read()
     count = len(re.findall(r'^\s*\{\s*"[^"]+"\s*,\s*\d+\s*,', tun, re.M))
     ttl_text = open(os.path.join(ROOT, 'lv2', 'hawk.ttl'), encoding='utf-8').read()
     m = re.search(r'lv2:symbol\s+"tuning".*?lv2:maximum\s+(\d+)', ttl_text, re.S)
@@ -81,7 +81,7 @@ def main():
     tools = os.path.join(ROOT, 'tools')
     checked = 0
     for f in sorted(os.listdir(tools)):
-        if not f.endswith('.cpp'):
+        if not f.endswith('.c'):
             continue
         for line in code_lines(os.path.join(tools, f), '//'):
             for name, val in re.findall(r'\b(?:P_([A-Z0-9_]+)|(NPORTS))\s*=\s*(\d+)', line) and \

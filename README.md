@@ -167,7 +167,7 @@ replacing any previous version:
 ```sh
 mkdir -p ~/.lv2
 rm -rf ~/.lv2/themonohawk.lv2
-tar -xzf TheMonoHawk-0.2.0-linux-x86_64.tar.gz -C ~/.lv2/
+tar -xzf TheMonoHawk-0.2.2-linux-x86_64.tar.gz -C ~/.lv2/
 ```
 
 That leaves `themonohawk.lv2/` under `~/.lv2/`. Restart your host (or rescan plugins) and it shows up as **The
@@ -181,7 +181,7 @@ Xlib and FreeType runtime libraries, which every Linux desktop has. What changed
 
 ## Building from source
 
-You'll need a C++17 compiler, [Meson](https://mesonbuild.com/) with Ninja,
+You'll need a C11 compiler (GCC or Clang), [Meson](https://mesonbuild.com/) with Ninja,
 pkg-config, and the LV2, Cairo, Xlib and FreeType development headers.
 
 ```sh

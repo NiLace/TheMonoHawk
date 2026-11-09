@@ -4,31 +4,31 @@
 # non-zero on any failure, so `meson test` reports honest pass/fail.
 
 test_note_mapping = executable('test_note_mapping',
-  'test_note_mapping.cpp',
+  'test_note_mapping.c',
   dependencies : hawk_core_dep)
 
 test('note mapping', test_note_mapping)
 
 test_ring_buffer = executable('test_ring_buffer',
-  'test_ring_buffer.cpp',
+  'test_ring_buffer.c',
   dependencies : hawk_core_dep)
 
 test('ring buffer', test_ring_buffer)
 
 test_pitch_detector = executable('test_pitch_detector',
-  'test_pitch_detector.cpp',
+  'test_pitch_detector.c',
   dependencies : hawk_core_dep)
 
 test('pitch detector', test_pitch_detector)
 
 test_pitch_reliability = executable('test_pitch_reliability',
-  'test_pitch_reliability.cpp',
+  'test_pitch_reliability.c',
   dependencies : hawk_core_dep)
 
 test('pitch reliability', test_pitch_reliability)
 
 test_fine_tuner = executable('test_fine_tuner',
-  'test_fine_tuner.cpp',
+  'test_fine_tuner.c',
   dependencies : hawk_core_dep)
 
 test('fine tuner', test_fine_tuner)
@@ -96,7 +96,7 @@ test('lv2 reads B0 under heavy rumble', hawk_wrongnote_probe,
   depends : hawk_lv2,
   timeout : 60)
 
-# What a misbehaving host, UI or signal chain can do (tools/hostile_probe.cpp): one NaN or Inf input
+# What a misbehaving host, UI or signal chain can do (tools/hostile_probe.c): one NaN or Inf input
 # sample used to deafen the tuner until re-activate (and an Inf pinned the level meter); one NaN or Inf
 # Dim Amount poisoned the output for good; a Dim Amount above 0 dB amplified; activate() twice and a
 # negative sample rate aborted the host (std::terminate).
@@ -167,7 +167,7 @@ test('lv2 no note from noise', hawk_noise_probe,
 
 
 
-# The GUI module unloads, and the host can keep drawing text after (tools/ui_unload_probe.cpp); the negative arm -- the font release function inside the module -- must crash. Skipped without an X display.
+# The GUI module unloads, and the host can keep drawing text after (tools/ui_unload_probe.c); the negative arm -- the font release function inside the module -- must crash. Skipped without an X display.
 test('ui unloads, host draws after', hawk_ui_unload_probe,
   args    : [hawk_ui, meson.project_build_root() / 'tools'],
   depends : hawk_ui,
@@ -211,3 +211,7 @@ test('lv2 activate without a thread, unguarded (negative arm)', hawk_thread_prob
 test('ui clicks', hawk_ui_click_probe, args : [meson.project_build_root() / 'tools'], timeout : 60)
 test('ui clicks on a stale layout (negative arm)', hawk_ui_click_probe_stale,
   args : [meson.project_build_root() / 'tools'], should_fail : true, timeout : 60)
+
+# The probes' random signals: tools/hawk_rng.h draws what libstdc++'s mt19937 + normal_distribution<double> drew.
+test_rng = executable('test_rng', 'test_rng.c', dependencies : m_dep, install : false)
+test('rng matches the standard library', test_rng)

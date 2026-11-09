@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.2 — 2026-11-09
+
+The plugin and its interface are now written in C. Nothing you hear or see changes: the readings, the lamps, the
+strobe, the reference tone and the interface are the same as 0.2.0's, checked sample for sample and pixel for
+pixel, and it costs the same CPU.
+
+- The plugin no longer needs the C++ runtime (libstdc++): it links only the C library and libm, and the interface
+  cairo, X11 and FreeType.
+- Building from source needs a C11 compiler (GCC or Clang), Meson and Ninja; no C++ compiler.
+- The same URI, ports and presets as 0.2.0: install the new bundle over the old folder and restart the host.
+
 ## 0.2.0 — 2026-10-23
 
 The first release since 0.1, and a large one: a new interface, a strobe view, and a detector that holds up when

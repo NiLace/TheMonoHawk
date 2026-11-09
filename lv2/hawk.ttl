@@ -19,7 +19,7 @@
         foaf:mbox <mailto:nilace@nylarea.com>
     ] ;
     lv2:minorVersion 2 ;
-    lv2:microVersion 0 ;
+    lv2:microVersion 2 ;
     lv2:optionalFeature lv2:hardRTCapable ;
     ui:ui <https://nylarea.com/lv2/themonohawk#ui> ;
     rdfs:comment "Chromatic tuner for guitar and bass on Linux." ;
